@@ -21,16 +21,6 @@
     (sb-bsd-sockets:socket-listen socket 5))
   (sb-thread:make-thread (lambda () (server-accept-thread :timeout timeout)) :name "cws-accepting-thread"))
 
-(defun start-server-process (address port &optional (timeout 5))
-  (let ((server-socket (setf *server-socket* (make-instance 'sb-bsd-sockets:inet-socket :type :stream :protocol :tcp)))
-	(server-address (setf *server-address* (sb-bsd-sockets:make-inet-address address))))
-    (sb-bsd-sockets:socket-bind server-socket server-address port)
-    (if (= 0 (sb-posix:fork))
-	(progn (sb-posix:setgid 1000)
-	(sb-posix:setuid 1000)
-	(sb-bsd-sockets:socket-listen server-socket 5)
-	(sb-thread:make-thread (lambda () (server-accept-thread :timeout timeout)) :name "cws-accepting-thread")))))
-
 (defun stop-server ()
   (sb-bsd-sockets:socket-close *server-socket*))
 

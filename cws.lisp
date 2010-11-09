@@ -24,10 +24,6 @@
 (defun stop-server ()
   (sb-bsd-sockets:socket-close *server-socket*))
 
-(defun server-accept ()
-  (setf *client-socket* (sb-bsd-sockets:socket-accept *server-socket*))
-  (setf *client-stream* (sb-bsd-sockets:socket-make-stream *client-socket* :input t :output t :buffering :none :timeout 5)))
-
 (defun client-disconnect (client-socket)
   (sb-bsd-sockets:socket-close client-socket))
 

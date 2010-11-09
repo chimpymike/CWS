@@ -1,0 +1,4 @@
+# Ignore lisp compiled files
+*.fasl
+# Ignore emacs autosave files
+*.*~

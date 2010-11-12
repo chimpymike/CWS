@@ -7,6 +7,8 @@
 (defparameter *server-address* nil)
 ;; Global variable for the server's main listening socket
 (defparameter *server-socket* nil)
+;; Global variable for the main accepting thread
+(defparameter *server-accepting-thread* nil)
 
 (defun start-server (address port &optional (timeout 5))
   (let ((socket (setf *server-socket* (make-instance 'sb-bsd-sockets:inet-socket :type :stream :protocol :tcp)))
@@ -15,9 +17,10 @@
     (sb-posix:setgid 1000)
     (sb-posix:setuid 1000)
     (sb-bsd-sockets:socket-listen socket 5))
-  (sb-thread:make-thread (lambda () (server-accept-thread :timeout timeout)) :name "cws-accepting-thread"))
+  (setf *server-accepting-thread* (sb-thread:make-thread (lambda () (server-accept-thread :timeout timeout)) :name "cws-accepting-thread")))
 
 (defun stop-server ()
+  (sb-thread:terminate-thread *server-accepting-thread*)
   (sb-bsd-sockets:socket-close *server-socket*))
 
 (defun client-disconnect (client-socket)

@@ -7,8 +7,6 @@
 (defparameter *server-address* nil)
 ;; Global variable for the server's main listening socket
 (defparameter *server-socket* nil)
-;; Global variable for the server <--> client connected socket
-(defparameter *client-socket* nil)
 
 (defun start-server (address port &optional (timeout 5))
   (let ((socket (setf *server-socket* (make-instance 'sb-bsd-sockets:inet-socket :type :stream :protocol :tcp)))

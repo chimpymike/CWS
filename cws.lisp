@@ -57,7 +57,7 @@
 		       ((string-not-equal "GET" (car client-request)) (client-send client-stream "Bad Request. No GET."))
 		       ((string-not-equal (concatenate 'string "HTTP/1.1" (string #\return)) (third client-request)) (client-send client-stream "Bad Request. Protocol"))
 		       ((string-not-equal "/" (second client-request)) (not-found-response client-stream))
-		       (t (index-page-response client-stream "Hello Millie"))))))
+		       (t (index-page-response client-stream "Hello World"))))))
     (sb-sys:io-timeout () (client-disconnect client-socket))
     (sb-int:simple-stream-error () (client-disconnect client-socket))
     (end-of-file () (client-disconnect client-socket))))
